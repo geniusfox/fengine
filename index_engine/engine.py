@@ -20,6 +20,7 @@ all_item = Table('all_loan_items', metadata, autoload= True)
 class LoanItem(Base):
 	__tablename__ = 'loan_items'
 	id = Column(Integer, primary_key = True)
+	update_time = Column(Integer)
 
 
 engine_job = Table('index_engine_jobs', metadata, autoload =True)
@@ -30,6 +31,7 @@ class EngineJob(Base):
 	job_name = Column(String(50), primary_key=True)
 	update_time = Column(Integer())
 
+class 
 	# def __init__(self, job_name, update_time):
 	# 	self.job_name = job_name
 	# 	self.update_time = update_time
