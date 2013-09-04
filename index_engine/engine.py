@@ -16,6 +16,24 @@ Base = declarative_base()
 metadata = MetaData(get_engine())
 loan_item_table = Table('loan_items', metadata, autoload=True)
 all_item = Table('all_loan_items', metadata, autoload= True)
+
+class LoanItem(Base):
+	__tablename__ = 'loan_items'
+	id = Column(Integer, primary_key = True)
+
+
+engine_job = Table('index_engine_jobs', metadata, autoload =True)
+
+class EngineJob(Base):
+	__tablename__ = 'index_engine_jobs'
+
+	job_name = Column(String(50), primary_key=True)
+	update_time = Column(Integer())
+
+	# def __init__(self, job_name, update_time):
+	# 	self.job_name = job_name
+	# 	self.update_time = update_time
+
 # print all_item
 
 # class LoanItem(Base):
@@ -33,18 +51,29 @@ def scan_loan_item_func():
 	engine = get_engine()
 	Session = sessionmaker(bind=engine)
 	session = Session()
+	conn = engine.connect()
+	job = session.query(EngineJob).filter(EngineJob.job_name == 'index_job').first()
+	update_time = int(time.time())
+	if job is None:
+		job = EngineJob(job_name = 'index_job', update_time = -1 )
+		session.add(job)
+	print "last update time: %s " % job.update_time
 	# session.query(User).filter_by(name='ed').first() 
 	# loan_item_table = Table('loan_items', metadata, autoload=True)
 	from sqlalchemy.orm.exc import NoResultFound
-	for it in session.query(loan_item_table):
+	for it in session.query(LoanItem).filter(LoanItem.update_time >=job.update_time) :
+		print "starting merge items"
 		try: 
 			item = session.query(all_item).filter('all_loan_items.unique_id' == it.unique_id).one()
+			if item.progress_rate < it.progress_rate:
+				item.progress_rate = it.progress_rate
+			if item.progress_rate == 100:
+				item.item_status = 1
 			# update all_loan_item
 		except NoResultFound, e:
 			#将loan_item的数据复制到all_loan_items表
-			conn = engine.connect()
 			conn.execute(all_item.insert().values(
-				loan_title = '',
+				loan_title = it.loan_title,
 				unique_id = it.unique_id,
 				loan_amount = it.loan_amount,
 				loan_term = it.loan_term,
@@ -53,12 +82,14 @@ def scan_loan_item_func():
 				loan_type= it.loan_type,
 				progress_rate = it.progress_rate,
 				credit_rating = it.credit_rating,
-				item_status = 0,
+				#item_status = 0,
 				update_time = int(time.time()),
-				site_id = it.site_id，
+				site_id = it.site_id,
 				item_status = 0
 			)
 		)
+	job.update_time = update_time
+	session.commit()
 	"""
 	* 扫描所有筹款进度100%，切项目状态为”筹款“的项目，更新项目状态
 	"""

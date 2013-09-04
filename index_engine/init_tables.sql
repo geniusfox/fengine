@@ -21,6 +21,14 @@ CREATE TABLE `all_loan_items` (
   KEY `index_site_status` (`site_id`,`item_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `index_engine_jobs`;
+CREATE TABLE `index_engine_jobs` (
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `job_name` varchar(50) NOT NULL, #任务名称
+  `update_time` bigint(18) NOT NULL, #任务结束时间
+  key `index_jobname` (`job_name`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- drop table if exists `online_loan_items`;
 -- CREATE TABLE `online_loan_items` (
 --   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,

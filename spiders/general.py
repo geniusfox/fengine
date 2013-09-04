@@ -63,7 +63,7 @@ def check_status(curl, code):
 	* 基本的P2P贷款项目的基本数据，包括贷款总额、期限、利率、项目URL
 """
 class LoanItem:
-	def __init__(self, loan_amount, loan_term, interest_rate, dest_url, loan_type, credit_rating, progress_rate, unique_id):
+	def __init__(self, loan_amount, loan_term, interest_rate, dest_url, loan_type, credit_rating, progress_rate, unique_id, loan_title =''):
 		self.unique_id = unique_id
 		self.loan_amount = loan_amount
 		self.loan_term = loan_term
@@ -72,6 +72,7 @@ class LoanItem:
 		self.credit_rating =  credit_rating
 		self.loan_type = loan_type
 		self.progress_rate = progress_rate
+		self.loan_title = loan_title
 
 
 
@@ -90,6 +91,7 @@ def save_loaditem2db (loan_items, engine, s_site_id):
 	for item in loan_items:
 		conn.execute(loan_item_table.insert().values(
 			unique_id = item.unique_id,
+			loan_title = item.loan_title,
 			loan_amount = item.loan_amount,
 			loan_term = item.loan_term,
 			interest_rate = item.interest_rate,

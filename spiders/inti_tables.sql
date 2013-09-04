@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS `loan_items`;
 CREATE TABLE `loan_items` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `load_title` varchar(255) NOT NULL, #借款标题
+  `loan_title` varchar(255) NOT NULL, #借款标题
   `loan_amount` int(11) NOT NULL, #借款总额
   `loan_term` int(11) NOT NULL, #借款期限
   `interest_rate` int(11) NOT NULL, #年化收益率
