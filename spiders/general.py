@@ -17,8 +17,13 @@ def rmb2digit(rmb):
 """
 def curl_init(curl):
 	curl.fp = StringIO.StringIO()
-	curl.setopt(curl.HTTPHEADER, ["Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", \
-            "User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0"])
+	curl.setopt(pycurl.VERBOSE,1)
+	curl.setopt(pycurl.FOLLOWLOCATION, 1)
+	curl.setopt(pycurl.MAXREDIRS, 5)
+	curl.setopt(pycurl.ENCODING, 'gzip')
+	# curl.setopt(curl.HTTPHEADER, ["Accept-Encoding: gzip"])
+	# curl.setopt(curl.HTTPHEADER, ["Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", \
+ #            "User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:20.0) Gecko/20100101 Firefox/20.0"])
 	curl.setopt(curl.TIMEOUT, 10)
 	curl.setopt(curl.WRITEFUNCTION, curl.fp.write)
 
@@ -63,7 +68,9 @@ def check_status(curl, code):
 	* 基本的P2P贷款项目的基本数据，包括贷款总额、期限、利率、项目URL
 """
 class LoanItem:
-	def __init__(self, loan_amount, loan_term, interest_rate, dest_url, loan_type, credit_rating, progress_rate, unique_id, loan_title =''):
+	def __init__(self, loan_amount, loan_term, interest_rate, dest_url, loan_type, 
+		credit_rating, progress_rate, unique_id, loan_title ='', min_investment = 0,
+		item_endtime = 0):
 		self.unique_id = unique_id
 		self.loan_amount = loan_amount
 		self.loan_term = loan_term
@@ -73,7 +80,8 @@ class LoanItem:
 		self.loan_type = loan_type
 		self.progress_rate = progress_rate
 		self.loan_title = loan_title
-
+		self.min_investment = min_investment
+		self.item_endtime = item_endtime
 
 
 def get_db_engine():
@@ -101,7 +109,9 @@ def save_loaditem2db (loan_items, engine, s_site_id):
 			credit_rating = item.credit_rating,
 			item_status = 0,
 			update_time = int(time.time()),
-			site_id = s_site_id
+			site_id = s_site_id,
+			min_investment= item.min_investment,
+			item_endtime = item.item_endtime
 			)
 		)
 

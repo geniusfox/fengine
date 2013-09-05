@@ -1,6 +1,7 @@
 #coding=utf-8
 #from apscheduler.scheduler import Scheduler  
 from apscheduler.jobstores.sqlalchemy_store import SQLAlchemyJobStore
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import * 
 from sqlalchemy.orm import sessionmaker
 import time    
@@ -10,20 +11,81 @@ def get_engine():
 	mysql_engine = create_engine('mysql://root:@localhost:3306/fengine?charset=utf8',encoding = "utf-8",echo =True)
 	return mysql_engine
 
-
-from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 metadata = MetaData(get_engine())
-loan_item_table = Table('loan_items', metadata, autoload=True)
-all_item = Table('all_loan_items', metadata, autoload= True)
+# loan_item_table = Table('loan_items', metadata, autoload=True)
+# all_item = Table('all_loan_items', metadata, autoload= True)
 
 class LoanItem(Base):
 	__tablename__ = 'loan_items'
 	id = Column(Integer, primary_key = True)
 	update_time = Column(Integer)
+	loan_title = Column(String)
+	loan_amount = Column(Integer)
+	loan_term = Column(Integer)
+	loan_type = Column(String)
+	interest_rate = Column(Integer)
+	dest_url = Column(String)
+	progress_rate = Column(Integer)
+	credit_rating = Column(String)
+	site_id = Column(String)
+	unique_id = Column(String)
 
 
-engine_job = Table('index_engine_jobs', metadata, autoload =True)
+
+"""
+ P2P贷款项目信息，包括
+ 	基本信息：项目名称、项目总额、期限、还款方式、风险等级、借款类型，起投金额、最大投资金额
+ 	动态的信息：筹款进度、投资笔数、项目状态信息
+
+"""
+class FullLoanItem(Base):
+	__tablename__ = 'all_loan_items'
+	id = Column(Integer,primary_key = True)
+	update_time = Column(Integer)
+	loan_title = Column(String)
+	loan_amount = Column(Integer)
+	loan_term = Column(Integer)
+	loan_type = Column(String)
+	interest_rate = Column(Integer)
+	dest_url = Column(String)
+	progress_rate = Column(Integer)
+	credit_rating = Column(String)
+	site_id = Column(String)
+	unique_id = Column(String)
+	item_status = Column(Integer)
+
+	"""
+	 根据LoanItem的数据更新，判定是否贷款进度有更新、募资总额。
+	 并根据更新后数据，判定是否修改item_status的状态码
+	 判定是否需要重新抓取Detail数据
+	"""
+	def update_with_item(self, loan_item):
+		if self.interest_rate < loan_item.interest_rate:
+			self.interest_rate = loan_item.interest_rate
+		if self.interest_rate >= 100:
+			self.item_status = 200
+
+	@staticmethod
+	def build_with_item(it):
+		full = FullLoanItem(
+			loan_title = it.loan_title,
+			unique_id = it.unique_id,
+			loan_amount = it.loan_amount,
+			loan_term = it.loan_term,
+			interest_rate = it.interest_rate,
+			dest_url = it.dest_url,
+			loan_type= it.loan_type,
+			progress_rate = it.progress_rate,
+			credit_rating = it.credit_rating,
+			update_time = it.update_time,
+			site_id = it.site_id,
+			item_status = 0
+			)
+		full.update_with_item(it)
+		return full
+
+# engine_job = Table('index_engine_jobs', metadata, autoload =True)
 
 class EngineJob(Base):
 	__tablename__ = 'index_engine_jobs'
@@ -31,7 +93,7 @@ class EngineJob(Base):
 	job_name = Column(String(50), primary_key=True)
 	update_time = Column(Integer())
 
-class 
+# class 
 	# def __init__(self, job_name, update_time):
 	# 	self.job_name = job_name
 	# 	self.update_time = update_time
@@ -66,30 +128,32 @@ def scan_loan_item_func():
 	for it in session.query(LoanItem).filter(LoanItem.update_time >=job.update_time) :
 		print "starting merge items"
 		try: 
-			item = session.query(all_item).filter('all_loan_items.unique_id' == it.unique_id).one()
-			if item.progress_rate < it.progress_rate:
-				item.progress_rate = it.progress_rate
-			if item.progress_rate == 100:
-				item.item_status = 1
+			item = session.query(FullLoanItem).filter(FullLoanItem.unique_id == it.unique_id).one()
+			item.update_with_item(it)
+			# if item.progress_rate < it.progress_rate:
+			# 	item.progress_rate = it.progress_rate
+			# if item.progress_rate == 100:
+			# 	item.item_status = 1
 			# update all_loan_item
 		except NoResultFound, e:
+			#增加新的项目
+			session.add(FullLoanItem.build_with_item(it))
 			#将loan_item的数据复制到all_loan_items表
-			conn.execute(all_item.insert().values(
-				loan_title = it.loan_title,
-				unique_id = it.unique_id,
-				loan_amount = it.loan_amount,
-				loan_term = it.loan_term,
-				interest_rate = it.interest_rate,
-				dest_url = it.dest_url,
-				loan_type= it.loan_type,
-				progress_rate = it.progress_rate,
-				credit_rating = it.credit_rating,
-				#item_status = 0,
-				update_time = int(time.time()),
-				site_id = it.site_id,
-				item_status = 0
-			)
-		)
+			# conn.execute(all_item.insert().values(
+			# 	loan_title = it.loan_title,
+			# 	unique_id = it.unique_id,
+			# 	loan_amount = it.loan_amount,
+			# 	loan_term = it.loan_term,
+			# 	interest_rate = it.interest_rate,
+			# 	dest_url = it.dest_url,
+			# 	loan_type= it.loan_type,
+			# 	progress_rate = it.progress_rate,
+			# 	credit_rating = it.credit_rating,
+			# 	#item_status = 0,
+			# 	update_time = int(time.time()),
+			# 	site_id = it.site_id,
+			# 	item_status = 0
+			# )
 	job.update_time = update_time
 	session.commit()
 	"""

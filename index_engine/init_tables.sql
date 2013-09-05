@@ -13,7 +13,7 @@ CREATE TABLE `all_loan_items` (
   `site_id` varchar(10) NOT NULL DEFAULT '', #站点名称
   `item_endtime` bigint(18), #融资的结束时间
   `progress_rate` int(11) DEFAULT NULL, #借款进度
-  `item_status` tinyint(2) NOT NULL, # 0 筹款, 1 满标, 2 开始还款, 3 还款结束
+  `item_status` tinyint(3) NOT NULL, # 0 项目创建，100 筹款, 200 满标, 300 开始还款, 400 还款结束
   `overdue` tinyint(1) DEFAULT  0, # 0 无逾期, 1 有部分逾期, 2 逾期
   `baddebt` tinyint(1) DEFAULT 0, # 0 正常 1 坏账
   `update_time` bigint(18) NOT NULL, #记录更新时间
