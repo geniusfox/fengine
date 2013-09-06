@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="span12">
+	<table class="table table-hover">
+		<thead>
+		    <tr>
+		      <th>P2P</th>
+		      <th>借款项目</th>
+		      <th>借款总额</th>
+		      <th>周期</th>
+		      <th>利率</th>
+		      <th>最低投资</th>
+		      <th>借款进度</th>
+		    </tr>
+		</thead>
+		<tbody>
+		{% for item in items %}
+			<tr>
+			    <td><img src='/static/img/{{item.site_id}}.png' ></td>
+			    <td><a href='{{item.dest_url}}' >{{item.loan_title}}</a></td>
+			    <td>￥{{item.loan_amount}}</td>
+			    <td>{{item.loan_term}}月</td>
+			    <td>{{item.interest_rate}}%</td>
+			    <td>￥{{item.min_investment}}</td>
+			    <td><div class="progress"><div class="bar" style="width: {{item.progress_rate}}%;"></div></div></td>
+	    	</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
