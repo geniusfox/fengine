@@ -5,8 +5,10 @@ import datetime as dt
 import time
 from sqlalchemy import * 
 import re
+import os
 
-ROOT_PAHT="/Users/geniusfox/Documents/projects/fengine/spiders"
+#ROOT_PATH="/Users/geniusfox/Documents/projects/fengine/spiders"
+ROOT_PATH=os.getcwd()
 
 #将 ￥12,0000.00 转换为 12000.00
 def rmb2digit(rmb):
@@ -43,7 +45,7 @@ def crawlerlog(doc):
 """
 def save_page(curl, site_id, page_type='list'):
 	#filename: {site_id}_[list/dtail]_{timestamp}.html
-	filename=u"%s/pages/%s_%s_%s.html" % (ROOT_PAHT, site_id, page_type, int(time.time())) 
+	filename=u"%s/pages/%s_%s_%s.html" % (ROOT_PATH, site_id, page_type, int(time.time())) 
 	try:
 		out = open(filename, 'w')
 		out.write(curl.fp.getvalue())

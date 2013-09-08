@@ -76,32 +76,32 @@ if __name__ == '__main__':
 	lendpage_local = None
 	loan_items = [] #all loan items would be saved
 
-	# pycurl.global_init(pycurl.GLOBAL_ALL)
-	# curl = pycurl.Curl()
-	# # curl object init
-	# curl_init(curl)
-	# #set targer_url.
-	# lendpage_url = "http://www.dianrong.com/browse/searchLoans"
-	# # curl.setopt(curl.HTTPHEADER, ['X-Requested-With: XMLHttpRequest'])
-	# curl.setopt(curl.URL, lendpage_url)
-	# curl.setopt(curl.POSTFIELDS,'page=0&pageSize=100&includeFullyFunded=true')
-	# try:
-	# 	curl.perform()
-	# 	#check repsonse code is 200
-	# 	if -1 == check_status(curl, 200):
-	# 		print 'maybe address changed or be found...'
-	# 		sys.exit(-1)
-	# 	# print curl.fp.getvalue()
-	# 	lendpage_local = save_page(curl, SITE_ID,'list')
-	# 	print "save html to: %s" % lendpage_local
-	# 	# parse_html2json("")
-	# 	# print "finished on %s " % dt.datetime.now()
-	# except pycurl.error, error:
-	# 	errno, errstr = error
-	# 	crawlerlog("+++++++++fetch_url():Error : %s;  url: %s" % (errstr, lendpage_url))
-	# #close curl & clean pycurl
-	# curl.close()
-	lendpage_local = './pages/dianrong_list_1378394244.html'
+	pycurl.global_init(pycurl.GLOBAL_ALL)
+	curl = pycurl.Curl()
+	# curl object init
+	curl_init(curl)
+	#set targer_url.
+	lendpage_url = "http://www.dianrong.com/browse/searchLoans"
+	# curl.setopt(curl.HTTPHEADER, ['X-Requested-With: XMLHttpRequest'])
+	curl.setopt(curl.URL, lendpage_url)
+	curl.setopt(curl.POSTFIELDS,'page=0&pageSize=100&includeFullyFunded=true')
+	try:
+		curl.perform()
+		#check repsonse code is 200
+		if -1 == check_status(curl, 200):
+			print 'maybe address changed or be found...'
+			sys.exit(-1)
+		# print curl.fp.getvalue()
+		lendpage_local = save_page(curl, SITE_ID,'list')
+		print "save html to: %s" % lendpage_local
+		# parse_html2json("")
+		# print "finished on %s " % dt.datetime.now()
+	except pycurl.error, error:
+		errno, errstr = error
+		crawlerlog("+++++++++fetch_url():Error : %s;  url: %s" % (errstr, lendpage_url))
+	#close curl & clean pycurl
+	curl.close()
+	# lendpage_local = './pages/dianrong_list_1378394244.html'
 
 	if not lendpage_local is None:
 		loan_items = parsing_list2items(loan_items, lendpage_local)
