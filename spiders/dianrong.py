@@ -101,7 +101,7 @@ if __name__ == '__main__':
 		crawlerlog("+++++++++fetch_url():Error : %s;  url: %s" % (errstr, lendpage_url))
 	#close curl & clean pycurl
 	curl.close()
-	# lendpage_local = './pages/dianrong_list_1378394244.html'
+	lendpage_local = './pages/dianrong_list_1378394244.html'
 
 	if not lendpage_local is None:
 		loan_items = parsing_list2items(loan_items, lendpage_local)

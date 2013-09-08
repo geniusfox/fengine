@@ -6,9 +6,12 @@ import time
 from sqlalchemy import * 
 import re
 import os
+import ConfigParser
 
 #ROOT_PATH="/Users/geniusfox/Documents/projects/fengine/spiders"
 ROOT_PATH=os.getcwd()
+cf = ConfigParser.ConfigParser()
+cf.read("spider_list.ini")
 
 #将 ￥12,0000.00 转换为 12000.00
 def rmb2digit(rmb):
@@ -87,7 +90,10 @@ class LoanItem:
 
 
 def get_db_engine():
-	return create_engine('mysql://root:@localhost:3306/fengine?charset=utf8',encoding = "utf-8",echo =True)  
+	db_url = "mysql://%s:%s@%s:3306/fengine?charset=utf8" % (cf.get("db", "db_user"), cf.get("db", "db_pass"), cf.get("db", "db_host"))
+	print db_url
+	# return create_engine('mysql://root:@localhost:3306/fengine?charset=utf8',encoding = "utf-8",echo =True)  
+	return create_engine( db_url,encoding = "utf-8",echo =True)  
 
 """
   将load item的对象保存到db
