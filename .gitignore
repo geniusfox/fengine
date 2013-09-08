@@ -34,3 +34,5 @@ Thumbs.dbs
 # tmp #
 ######################
 spiders/pages/*
+
+*.pyc
