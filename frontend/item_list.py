@@ -1,5 +1,6 @@
 #coding=utf-8
-from flask import Flask
+from flask import Flask,url_for
+from flask import request
 from flask import render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -10,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 # from sqlalchemy import create_engine
 # from sqlalchemy.orm import scoped_session, sessionmaker
 # from sqlalchemy.ext.declarative import declarative_base
-
+sites = {"renrendai":"人人贷", "my089":"红岭创投", "dianrong":"点融" , "yooli":"有利" }
 
 app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/fengine?charset=utf8'
@@ -57,6 +58,9 @@ class FullLoanItem(Base):
 	unique_id = Column(String)
 	item_status = Column(Integer)
 
+@app.route("/")
+def index():
+	return render_template('index.html')
 
 @app.route("/loan_items")
 def loan_items():
@@ -64,10 +68,16 @@ def loan_items():
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	conn = engine.connect()
-	items = session.query(FullLoanItem)[1:20]
+	site_id = request.args.get('site_id')
+	if site_id is None:
+		items = session.query(FullLoanItem)[1:20]
+	else:
+		items = session.query(FullLoanItem).filter(FullLoanItem.site_id == site_id)[1:20]
 	# for item in items:
 	# 	print item.loan_title
-	return render_template('item_list.html', items = items)
+	# if not site_id is None:
+		# print site_id
+	return render_template('item_list.html', items = items, sites = sites)
 	# return "Hello world! %s " % name
 
 if __name__ == "__main__":
