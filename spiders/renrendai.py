@@ -86,7 +86,7 @@ if __name__ == '__main__':
 				loan_term = re.match(r'([0-9]+)*', loan_term).group(1)
 				# print loan_term
 				dest_url = data.find('div', {"class": "l loanimgbox"}).a.get("href")
-				dest_url = "http://wwww.renrendai.com"+(dest_url[2:])
+				dest_url = "http://www.renrendai.com"+(dest_url[2:])
 
 				loan_title = data.find('div', {"class": "l loanimgbox"}).a.img.get("alt")
 				# print dest_url
