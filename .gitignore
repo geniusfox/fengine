@@ -36,3 +36,9 @@ Thumbs.dbs
 spiders/pages/*
 
 *.pyc
+
+spiders/general.pyc
+
+spiders/.DS_Store
+
+spiders/.DS_Store
