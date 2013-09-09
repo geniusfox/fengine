@@ -2,25 +2,48 @@
 <html lang="en">
 	<head>
 	    <meta charset="utf-8">
-	    <title>金钱永不眠</title>
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>招财狐狸还是貔貅.com</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	    <meta name="description" content="冯仑在《野蛮生长》里说，钱是有腿、有性格的、也是有气味的。因为钱心跟着人心走。钱是是非地，是是非人玩的是非物。这是迄今为止，我见过的对钱最市井却也是最精辟的总结。">
 	    <link rel="Shortcut Icon" href="/static/img/favicon.ico" type="image/x-icon"/>
-	    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-	    <link rel="sytlesheet" href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}" >
+	    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}" />
+	    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
 	</head>
 	<body data-spy="scroll" data-target=".bs-docs-sidebar">
-		<div class="navbar">
-		  <div class="navbar-inner">
-		    <a class="brand" href="#">金钱永未眠</a>
-		    <ul class="nav">
-		      <li class="active"><a href="#">首页</a></li>
-		      <li><a href="#">P2P项目</a></li>
-		      <li><a href="#">关于</a></li>
-		    </ul>
-		  </div>
-		</div>
-		<div class="row">{% block content %}{% endblock %}</div>
+		<!-- Navbar
+    	================================================== -->
+		<div class="navbar navbar-inverse navbar-fixed-top">
+	      <div class="navbar-inner">
+	        <div class="container">
+	          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="brand" href="#">招财狐狸</a>
+	          <div class="nav-collapse collapse">
+	            <ul class="nav">
+	              <li class="active"><a href="/">首页</a></li>
+	              <li><a href="/loan_items">高收益理财产品</a></li>
+	              <li><a href="#contact">关于我们</a></li>
+	              <!-- <li class="dropdown">
+	                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+	                <ul class="dropdown-menu">
+	                  <li><a href="#">Action</a></li>
+	                  <li><a href="#">Another action</a></li>
+	                  <li><a href="#">Something else here</a></li>
+	                  <li class="divider"></li>
+	                  <li class="nav-header">Nav header</li>
+	                  <li><a href="#">Separated link</a></li>
+	                  <li><a href="#">One more separated link</a></li>
+	                </ul>
+	              </li> -->
+	            </ul>
+	          </div><!--/.nav-collapse -->
+	        </div>
+	      </div>
+	    </div>
+		<div class="container">{% block content %}{% endblock %}</div>
 		<div class="footer">
         	<p>&copy; Company 2013</p>
       	</div>

@@ -1,31 +1,70 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="span12">
-	<table class="table table-hover">
-		<thead>
-		    <tr>
-		      <th>P2P</th>
-		      <th>借款项目</th>
-		      <th>借款总额</th>
-		      <th>周期</th>
-		      <th>利率</th>
-		      <th>最低投资</th>
-		      <th>借款进度</th>
-		    </tr>
-		</thead>
-		<tbody>
-		{% for item in items %}
-			<tr>
-			    <td><img src='/static/img/{{item.site_id}}.png' ></td>
-			    <td><a href='{{item.dest_url}}' >{{item.loan_title}}</a></td>
-			    <td>￥{{item.loan_amount}}</td>
-			    <td>{{item.loan_term}}月</td>
-			    <td>{{item.interest_rate}}%</td>
-			    <td>￥{{item.min_investment}}</td>
-			    <td><div class="progress"><div class="bar" style="width: {{item.progress_rate}}%;"></div></div></td>
-	    	</tr>
-		{% endfor %}
-		</tbody>
-	</table>
+<hr/>
+
+<div class= "row" >
+	<div class="span12">
+		<!--Body content-->
+		<h2>理财产品列表</h2>
+		<p>从{% for site_id in sites %}<code><a href="/loan_items?site_id={{site_id}}" >{{site_id}}</a></code>&nbsp;{% endfor %}获得年化收益率10%~17%的理财产品</p>
+		<div class="btn-toolbar">
+			<div class="btn-group">
+			 	<button class="btn">1</button>
+		        <button class="btn">2</button>
+		        <button class="btn">3</button>
+		        <button class="btn">4</button>
+		        <button class="btn">更多</button>
+		    </div>
+		</div>
+		<table class="table table-hover table-bordered">
+			<thead>
+			    <tr>
+			      <th>网站</th>
+			      <th>投资用途</th>
+			      <th>借款总额</th>
+			      <th>期限</th>
+			      <th>年化收益</th>
+			      <th>风险</th>
+			      <th>起购金额</th>
+			      <th>借款进度</th>
+			      <th>实际收益</th>
+			      <th>上线时间</th>
+			    </tr>
+			</thead>
+			<tbody>
+			{% for item in items %}
+				<tr>
+				    <td><img src='/static/img/{{item.site_id}}.png' ></td>
+				    <td><a href='{{item.dest_url}}' >{{item.loan_title}}</a></td>
+				    <td>￥{{item.loan_amount}}</td>
+				    <td>{{item.loan_term}}月</td>
+				    <td>{{item.interest_rate}}%</td>
+				    <td>{{item.credit_rating}} </td>
+				    <td>￥{{item.min_investment}}</td>
+				    <td><div class="progress"><div class="bar" style="width: {{item.progress_rate}}%;"></div></div></td>
+				    <td>￥50,000</td>
+				    <td></td>
+		    	</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		<div class="btn-toolbar">
+			<div class="btn-group">
+			 	<button class="btn">1</button>
+		        <button class="btn">2</button>
+		        <button class="btn">3</button>
+		        <button class="btn">4</button>
+		        <button class="btn">更多</button>
+		    </div>
+		</div>
+	</div>
 </div>
+<div class="row">
+    <div class="span4"></div>
+    <div class="span4"></div>
+    <div class="span4">
+      
+   </div>
+</div>
+
 {% endblock %}
