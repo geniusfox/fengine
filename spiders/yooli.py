@@ -38,7 +38,7 @@ def parsing_list2items(loan_items, local_file):
 			if match:
 				unique_id = match.group(1)
 				loan_items.append(LoanItem(loan_amount, loan_term, interest_rate, dest_url,
-						loan_type, credit_rating, progress_rate, unique_id))
+						loan_type, credit_rating, progress_rate, unique_id, loan_title= loan_title))
 				# print 
 			# match = re.match(r'.*loanId=([0-9]+)', dest_url)
 			# if match:
