@@ -70,7 +70,7 @@ def check_status(curl, code):
 
 
 """
-	* 基本的P2P贷款项目的基本数据，包括贷款总额、期限、利率、项目URL
+ 基本的P2P贷款项目的基本数据，包括贷款总额、期限、利率、项目URL
 """
 class LoanItem:
 	def __init__(self, loan_amount, loan_term, interest_rate, dest_url, loan_type, 
@@ -88,10 +88,12 @@ class LoanItem:
 		self.min_investment = min_investment
 		self.item_endtime = item_endtime
 
+	def save2db(self): pass
+		
 
 def get_db_engine():
 	db_url = "mysql://%s:%s@%s:3306/fengine?charset=utf8" % (cf.get("db", "db_user"), cf.get("db", "db_pass"), cf.get("db", "db_host"))
-	print db_url
+	# print db_url
 	# return create_engine('mysql://root:@localhost:3306/fengine?charset=utf8',encoding = "utf-8",echo =True)  
 	return create_engine( db_url,encoding = "utf-8",echo =True)  
 
