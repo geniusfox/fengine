@@ -11,7 +11,7 @@ import ConfigParser
 #ROOT_PATH="/Users/geniusfox/Documents/projects/fengine/spiders"
 ROOT_PATH=os.getcwd()
 cf = ConfigParser.ConfigParser()
-cf.read("spider_list.ini")
+cf.read("conf.ini")
 
 #将 ￥12,0000.00 转换为 12000.00
 def rmb2digit(rmb):
