@@ -5,14 +5,27 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import * 
 from sqlalchemy.orm import sessionmaker
 import time    
+import ConfigParser
+import sys, os
+
+
+# ROOT_PATH=os.getcwd()
+def get_root():
+	return os.path.abspath(os.path.dirname(sys.argv[0]))
+
+cf = ConfigParser.ConfigParser()
+cf.read(os.path.join(get_root(), "conf.ini"))
 
 #获取数据库连接
-def get_engine():
-	mysql_engine = create_engine('mysql://root:@localhost:3306/fengine?charset=utf8',encoding = "utf-8",echo =True)
-	return mysql_engine
+def get_db_engine():
+	db_url = "mysql://%s:%s@%s:3306/fengine?charset=utf8" % (cf.get("db", "db_user"), cf.get("db", "db_pass"), cf.get("db", "db_host"))
+	return create_engine( db_url,encoding = "utf-8",echo =True) 
+# def get_engine():
+# 	mysql_engine = create_engine('mysql://root:@localhost:3306/fengine?charset=utf8',encoding = "utf-8",echo =True)
+	# return mysql_engine
 
 Base = declarative_base()
-metadata = MetaData(get_engine())
+metadata = MetaData(get_db_engine())
 # loan_item_table = Table('loan_items', metadata, autoload=True)
 # all_item = Table('all_loan_items', metadata, autoload= True)
 
@@ -112,7 +125,7 @@ def scan_loan_item_func():
 	*如果是新项目, 直接复制项目信息到all_loan_items数据，并设置状态为新增
 	*如果是已有的项目，更新项目状态、筹款的进度、借款的笔数等动态信息。
 	"""
-	engine = get_engine()
+	engine = get_db_engine()
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	conn = engine.connect()
@@ -161,6 +174,16 @@ def scan_loan_item_func():
 	"""
 
 if __name__ == '__main__':
+	# import inspect, os, sys
+	# print os.getcwd()
+	# caller_file =  inspect.stack()[0][1]
+	# print os.path.abspath(os.path.dirname(caller_file))
+	# print sys.argv[0]
+    # caller_file = inspect.stack()[1][1]
+    # caller_file = inspect.stack()
+    # this_file = inspect.getfile(inspect.currentframe())
+    # print this_file
+    # print os.path.abspath(os.path.dirname(caller_file))
 	scan_loan_item_func()
 	# print(AllLoanItem.__tablename__)
 	# print(AllLoanItem.__mapper__ )
