@@ -7,11 +7,22 @@ from sqlalchemy import *
 import re
 import os
 import ConfigParser
+import sys, os
 
-#ROOT_PATH="/Users/geniusfox/Documents/projects/fengine/spiders"
-ROOT_PATH=os.getcwd()
+# #ROOT_PATH="/Users/geniusfox/Documents/projects/fengine/spiders"
+# ROOT_PATH=os.getcwd()
+# cf = ConfigParser.ConfigParser()
+# cf.read("conf.ini")
+
+
+# ROOT_PATH=os.getcwd()
+def get_root():
+	return os.path.abspath(os.path.dirname(sys.argv[0]))
+root_path = get_root()
+
 cf = ConfigParser.ConfigParser()
-cf.read("conf.ini")
+cf.read(os.path.join(get_root(), "conf.ini"))
+
 
 #将 ￥12,0000.00 转换为 12000.00
 def rmb2digit(rmb):
@@ -48,7 +59,7 @@ def crawlerlog(doc):
 """
 def save_page(curl, site_id, page_type='list'):
 	#filename: {site_id}_[list/dtail]_{timestamp}.html
-	filename=u"%s/pages/%s_%s_%s.html" % (ROOT_PATH, site_id, page_type, int(time.time())) 
+	filename=u"%s/pages/%s_%s_%s.html" % (root_path, site_id, page_type, int(time.time())) 
 	try:
 		out = open(filename, 'w')
 		out.write(curl.fp.getvalue())
