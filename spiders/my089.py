@@ -21,7 +21,7 @@ def parsing_list2items(loan_items, local_file):
 		soup = BeautifulSoup(html_file.read())
 		for data in soup('div', {"class" : "biao_item"}):
 			tmp = data.find('dl', {"class": "biaoti"}).findAll('a')[2]
-			dest_url = tmp.get('href')
+			dest_url = "http://www.my089.com/Loan/%s" % tmp.get('href')
 			loan_title = tmp.string.strip()
 			# print loan_title
 
