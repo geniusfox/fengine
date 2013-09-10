@@ -35,7 +35,7 @@
 			{% for item in items %}
 				<tr>
 				    <td><img src='/static/img/{{item.site_id}}.png' ></td>
-				    <td><a href='{{item.dest_url}}' >{{item.loan_title}}</a></td>
+				    <td><a href='{{item.dest_url}}' target="_blank">{{item.loan_title}}</a></td>
 				    <td>￥{{item.loan_amount}}</td>
 				    <td>{{item.loan_term}}月</td>
 				    <td>{{item.interest_rate}}%</td>
